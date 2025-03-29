@@ -36,18 +36,6 @@ npm test
 
 ## Project Insights
 
-### Development Timeline
-
-| Task | Time Spent |
-|------|------------|
-| Project setup & API structure | 10 minutes |
-| Docker & CI pipeline setup | 25 minutes |
-| ESLint fixes | 3 minutes |
-| Search functionality | 15 minutes |
-| Populate functionality | 35 minutes |
-| Documentation & Answer to the questions & README | 10 minutes |
-| **Total Time** | **1 hour 13 minutes** |
-
 ### Technical Considerations
 
 #### Database Schema
@@ -91,8 +79,8 @@ Moreover, by using that ID, we would be able to update rows if duplicate items a
 
 
 #### Question 1:
-```We are planning to put this project in production. According to you, what are the missing pieces to make this project production ready? 
-Please elaborate an action plan.```
+We are planning to put this project in production. According to you, what are the missing pieces to make this project production ready? 
+Please elaborate an action plan.
 
 Let's say that we don't update the database schema and put the app in production (in this state):
 - First of all, we would dockerize the app and add a CI pipeline to check the unit tests (I already did it as a bonus) to have a harmonized deployment
@@ -105,8 +93,8 @@ Let's say that we don't update the database schema and put the app in production
 
 
 #### Question 2:
-```Let's pretend our data team is now delivering new files every day into the S3 bucket, and our service needs to ingest those files
-every day through the populate API. Could you describe a suitable solution to automate this? Feel free to propose architectural changes.```
+Let's pretend our data team is now delivering new files every day into the S3 bucket, and our service needs to ingest those files
+every day through the populate API. Could you describe a suitable solution to automate this? Feel free to propose architectural changes.
 
 
 We could use a cron job to run the populate API every day at a specific time.
