@@ -31,7 +31,7 @@ describe('POST /api/games', () => {
         assert.strictEqual(result.body.bundleId, 'test.bundle.id');
         assert.strictEqual(result.body.appVersion, '1.0.0');
         assert.strictEqual(result.body.isPublished, true);
-        done();
+        return done();
       });
   });
 });
@@ -55,7 +55,7 @@ describe('GET /api/games', () => {
         assert.strictEqual(result.body[0].bundleId, 'test.bundle.id');
         assert.strictEqual(result.body[0].appVersion, '1.0.0');
         assert.strictEqual(result.body[0].isPublished, true);
-        done();
+        return done();
       });
   });
 });
@@ -90,7 +90,7 @@ describe('PUT /api/games/1', () => {
         assert.strictEqual(result.body.bundleId, 'test.newBundle.id');
         assert.strictEqual(result.body.appVersion, '1.0.1');
         assert.strictEqual(result.body.isPublished, false);
-        done();
+        return done();
       });
   });
 });
@@ -107,7 +107,7 @@ describe('DELETE /api/games/1', () => {
       .expect(200)
       .end((err) => {
         if (err) return done(err);
-        done();
+        return done();
       });
   });
 });
@@ -125,7 +125,7 @@ describe('GET /api/games', () => {
       .end((err, result) => {
         if (err) return done(err);
         assert.strictEqual(result.body.length, 0);
-        done();
+        return done();
       });
   });
 });
