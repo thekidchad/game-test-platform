@@ -61,6 +61,31 @@ describe('GET /api/games', () => {
 });
 
 /**
+ * Testing search games endpoint
+ */
+describe('POST /api/games/search', () => {
+  it('should find the game by name', (done) => {
+    request(app)
+      .post('/api/games/search')
+      .send({ name: 'test' })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end((err, result) => {
+        if (err) return done(err);
+        assert.strictEqual(result.body[0].publisherId, '1234567890');
+        assert.strictEqual(result.body[0].name, 'Test App');
+        assert.strictEqual(result.body[0].platform, 'ios');
+        assert.strictEqual(result.body[0].storeId, '1234');
+        assert.strictEqual(result.body[0].bundleId, 'test.bundle.id');
+        assert.strictEqual(result.body[0].appVersion, '1.0.0');
+        assert.strictEqual(result.body[0].isPublished, true);
+        return done();
+      });
+  });
+});
+
+/**
  * Testing update game endpoint
  */
 describe('PUT /api/games/1', () => {

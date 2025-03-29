@@ -24,6 +24,32 @@ app.post('/api/games', (req, res) => {
     });
 });
 
+app.post('/api/games/search', (req, res) => {
+  const { name, platform } = req.body;
+  const whereClause = {};
+
+  if (name) {
+    whereClause.name = db.Sequelize.where(
+      db.Sequelize.fn('LOWER', db.Sequelize.col('name')),
+      'LIKE',
+      `%${name.toLowerCase()}%`,
+    );
+  }
+
+  if (platform) {
+    whereClause.platform = platform; // no need to lower case since it's a dropdown.
+  }
+
+  return db.Game.findAll({
+    where: whereClause,
+  })
+    .then((games) => res.send(games))
+    .catch((err) => {
+      console.log('***Error searching games', JSON.stringify(err));
+      res.status(400).send(err);
+    });
+});
+
 app.delete('/api/games/:id', (req, res) => {
   // eslint-disable-next-line radix
   const id = parseInt(req.params.id);
