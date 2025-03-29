@@ -154,3 +154,20 @@ describe('GET /api/games', () => {
       });
   });
 });
+
+describe('POST /api/games/populate', () => {
+  it('should populate games from external APIs', (done) => {
+    request(app)
+      .post('/api/games/populate')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end((err, result) => {
+        if (err) return done(err);
+        assert(result.body.message === 'Database populated successfully');
+        assert(result.body.gamesCount > 0);
+        assert(result.body.timeElapsed.includes('ms'));
+        return done();
+      });
+  });
+});

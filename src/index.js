@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const axios = require('axios');
 const db = require('./models');
+const { STORE_URLS } = require('./constants/urls');
+const { flatten } = require('./utils/arrays');
+const { mapGameToModel } = require('./utils/gameMapper');
 
 const app = express();
 
@@ -75,6 +79,41 @@ app.put('/api/games/:id', (req, res) => {
           res.status(400).send(err);
         });
     });
+});
+
+app.post('/api/games/populate', async (req, res) => {
+  const startTime = Date.now();
+
+  try {
+    const [androidResponse, iosResponse] = await Promise.all([
+      axios.get(STORE_URLS.ANDROID),
+      axios.get(STORE_URLS.IOS),
+    ]);
+
+    const androidGames = flatten(androidResponse.data)
+      .map((game) => mapGameToModel({ ...game, platform: 'android' }));
+
+    const iosGames = flatten(iosResponse.data)
+      .map((game) => mapGameToModel({ ...game, platform: 'ios' }));
+
+    const createdGames = await db.Game.bulkCreate([...androidGames, ...iosGames]);
+
+    const timeElapsed = Date.now() - startTime;
+
+    return res.send({
+      message: 'Database populated successfully',
+      gamesCount: createdGames.length,
+      timeElapsed: `${timeElapsed}ms`,
+    });
+  } catch (err) {
+    const timeElapsed = Date.now() - startTime;
+    console.log('***Error populating games', JSON.stringify(err));
+    return res.status(400).send({
+      error: 'Failed to populate database',
+      details: err.message,
+      timeElapsed: `${timeElapsed}ms`,
+    });
+  }
 });
 
 app.listen(3000, () => {
